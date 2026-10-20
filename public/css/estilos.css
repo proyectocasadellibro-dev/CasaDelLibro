@@ -1,0 +1,35 @@
+:root { --vino:#9b2247; --vino-osc:#7a1a37; --gris:#f4f4f6; --texto:#222; }
+* { box-sizing: border-box; }
+body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:var(--gris); color:var(--texto); }
+
+/* Login */
+.fondo-login { min-height:100vh; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,var(--vino),#3d0f1d); }
+.login-caja { background:#fff; padding:36px 32px; border-radius:12px; width:100%; max-width:380px;
+  box-shadow:0 10px 30px rgba(0,0,0,.3); }
+.login-caja h1 { margin:0; text-align:center; color:var(--vino); font-size:1.6rem; }
+.subtitulo { text-align:center; color:#666; margin:6px 0 24px; }
+label { display:block; margin:14px 0 6px; font-weight:600; font-size:.9rem; }
+input { width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px; font-size:1rem; }
+input:focus { outline:2px solid var(--vino); border-color:transparent; }
+button[type=submit] { width:100%; margin-top:22px; padding:11px; background:var(--vino); color:#fff;
+  border:0; border-radius:6px; font-size:1rem; cursor:pointer; }
+button[type=submit]:hover { background:var(--vino-osc); }
+button:disabled { opacity:.6; cursor:wait; }
+.error { color:#b00020; background:#fde7ea; padding:8px 10px; border-radius:6px; margin:14px 0 0; font-size:.9rem; }
+
+/* Principal */
+.barra { background:var(--vino); color:#fff; display:flex; justify-content:space-between;
+  align-items:center; padding:12px 24px; flex-wrap:wrap; gap:10px; }
+.barra h1 { margin:0; font-size:1.3rem; }
+.barra-usuario { display:flex; align-items:center; gap:12px; }
+.etiqueta { background:#fff; color:var(--vino); padding:3px 10px; border-radius:20px; font-size:.8rem; font-weight:600; }
+.btn-salir { background:transparent; color:#fff; border:1px solid #fff; padding:6px 12px; border-radius:6px; cursor:pointer; }
+.btn-salir:hover { background:#fff; color:var(--vino); }
+.contenido { max-width:1000px; margin:30px auto; padding:0 20px; }
+.tarjetas { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; margin-top:20px; }
+.tarjeta { background:#fff; border-radius:10px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,.08);
+  border-top:4px solid var(--vino); }
+.tarjeta h3 { margin:0 0 8px; }
+.tarjeta p { color:#555; font-size:.92rem; }
+.tarjeta small { color:#999; }

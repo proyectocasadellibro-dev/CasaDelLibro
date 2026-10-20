@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Casa Del Libro | Iniciar sesión</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body class="fondo-login">
+  <main class="login-caja">
+    <h1>📚 La Casa Del Libro</h1>
+    <p class="subtitulo">Sistema de registros bibliotecaria</p>
+
+    <form id="formLogin" autocomplete="off">
+      <label for="usuario">Usuario</label>
+      <input type="text" id="usuario" maxlength="30" required autofocus>
+
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" maxlength="100" required>
+
+      <p id="error" class="error" hidden></p>
+
+      <button type="submit" id="btnEntrar">Entrar</button>
+    </form>
+  </main>
+  <script src="/js/login.js"></script>
+</body>
+</html>

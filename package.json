@@ -1,0 +1,17 @@
+{
+  "name": "casa-del-libro",
+  "version": "1.0.0",
+  "description": "Sistema de registros bibliotecaria - La Casa Del Libro",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^18.0.6",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.24.5"
+  }
+}

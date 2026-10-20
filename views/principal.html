@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Casa Del Libro | Principal</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="barra">
+    <h1>📚 La Casa Del Libro</h1>
+    <div class="barra-usuario">
+      <span id="nombreUsuario"></span>
+      <span id="rolUsuario" class="etiqueta"></span>
+      <button id="btnSalir" class="btn-salir">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="contenido">
+    <h2 id="bienvenida">Bienvenido</h2>
+    <p>Selecciona un módulo para comenzar.</p>
+
+    <section class="tarjetas">
+      <!-- data-roles: roles que pueden ver cada módulo -->
+      <article class="tarjeta" data-roles="Administrador">
+        <h3>👥 Usuarios del sistema</h3>
+        <p>Cuentas, roles y permisos del personal.</p>
+        <small>Próximamente</small>
+      </article>
+
+      <article class="tarjeta" data-roles="Administrador,Empleado">
+        <h3>🔄 Préstamos y devoluciones</h3>
+        <p>Registrar préstamos y devoluciones de libros.</p>
+        <small>Próximamente</small>
+      </article>
+
+      <article class="tarjeta" data-roles="Administrador,Empleado">
+        <h3>📖 Libros y lectores</h3>
+        <p>Catálogo, disponibilidad y registro de lectores.</p>
+        <small>Próximamente</small>
+      </article>
+
+      <article class="tarjeta" data-roles="Administrador,Gerente">
+        <h3>📊 Reportes</h3>
+        <p>Préstamos por periodo y libros más solicitados.</p>
+        <small>Próximamente</small>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/principal.js"></script>
+</body>
+</html>
