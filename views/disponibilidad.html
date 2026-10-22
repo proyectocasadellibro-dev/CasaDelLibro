@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Disponibilidad · La Casa Del Libro</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="encabezado" id="encabezado"></header>
+
+  <main class="contenedor">
+    <div class="titulo-pagina">
+      <div>
+        <h1>Disponibilidad de libros</h1>
+        <p class="subtitulo">Consulta qué libros están disponibles, prestados o no disponibles.</p>
+      </div>
+    </div>
+
+    <div class="resumen">
+      <div class="dato verde"><div class="numero" id="cntDisponible">0</div><div class="etiqueta">Disponibles</div></div>
+      <div class="dato amarillo"><div class="numero" id="cntPrestado">0</div><div class="etiqueta">Con todos sus ejemplares prestados</div></div>
+      <div class="dato rojo"><div class="numero" id="cntNoDisponible">0</div><div class="etiqueta">No disponibles</div></div>
+    </div>
+
+    <section class="tarjeta">
+      <div class="barra">
+        <input type="search" id="buscar" placeholder="Buscar por título, autor o categoría…" autocomplete="off">
+        <select id="filtroEstado" aria-label="Filtrar por disponibilidad">
+          <option value="">Todos</option>
+          <option value="Disponible">Disponible</option>
+          <option value="Prestado">Prestado</option>
+          <option value="No disponible">No disponible</option>
+        </select>
+      </div>
+
+      <div class="tabla-envoltorio">
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Categoría</th>
+              <th class="num">Total</th>
+              <th class="num">Libres</th>
+              <th class="num">Prestados</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo"></tbody>
+        </table>
+      </div>
+      <p class="vacio" id="vacio" hidden>No se encontraron libros.</p>
+    </section>
+  </main>
+
+  <div id="toasts" class="toasts"></div>
+  <script src="/js/comun.js"></script>
+  <script src="/js/disponibilidad.js"></script>
+</body>
+</html>

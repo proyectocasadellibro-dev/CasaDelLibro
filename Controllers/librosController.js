@@ -98,4 +98,33 @@ async function categorias(req, res) {
   }
 }
 
-module.exports = { guardar, obtener, buscar, disponibilidad, categorias };
+// POST /api/categorias   Body: { idCategoria, nombre, descripcion }
+async function guardarCategoria(req, res) {
+  try {
+    const { idCategoria, nombre, descripcion } = req.body || {};
+
+    const id = leerId(idCategoria);
+    if (id === null) {
+      return res.status(400).json({ ok: false, mensaje: 'El id de la categoría no es válido.' });
+    }
+
+    const fila = await librosRepo.guardarCategoria({ idCategoria: id, nombre, descripcion });
+
+    if (!fila) {
+      return res.status(500).json({ ok: false, mensaje: 'No se pudo guardar la categoría.' });
+    }
+    if (fila.Codigo === null) {
+      return res.status(404).json({ ok: false, mensaje: 'La categoría no existe.' });
+    }
+    if (fila.Codigo !== 0) {
+      return res.status(estadoHttp(fila.Codigo)).json({ ok: false, mensaje: fila.Mensaje });
+    }
+
+    res.status(id === 0 ? 201 : 200).json({ ok: true, mensaje: fila.Mensaje, idCategoria: fila.IdCategoria });
+  } catch (err) {
+    console.error('Error al guardar categoría:', err.message);
+    res.status(500).json({ ok: false, mensaje: 'Error en el servidor.' });
+  }
+}
+
+module.exports = { guardar, obtener, buscar, disponibilidad, categorias, guardarCategoria };

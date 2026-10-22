@@ -1,0 +1,123 @@
+<<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lectores · La Casa Del Libro</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="encabezado" id="encabezado"></header>
+
+  <main class="contenedor">
+    <div class="titulo-pagina">
+      <div>
+        <h1>Lectores</h1>
+        <p class="subtitulo">Registra, busca y administra a los lectores de la biblioteca.</p>
+      </div>
+      <button type="button" class="btn principal" id="btnNuevo" hidden>+ Nuevo lector</button>
+    </div>
+
+    <section class="tarjeta">
+      <div class="barra">
+        <input type="search" id="buscar" placeholder="Buscar por nombre, matrícula o folio…" autocomplete="off">
+        <select id="filtroEstado" aria-label="Filtrar por estado">
+          <option value="">Todos los estados</option>
+          <option value="Activo">Activo</option>
+          <option value="Suspendido">Suspendido</option>
+          <option value="Baja">Baja</option>
+        </select>
+      </div>
+
+      <div class="tabla-envoltorio">
+        <table>
+          <thead>
+            <tr>
+              <th>Matrícula</th>
+              <th>Folio</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Estado</th>
+              <th id="thAcciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo"></tbody>
+        </table>
+      </div>
+      <p class="vacio" id="vacio" hidden>No se encontraron lectores.</p>
+    </section>
+  </main>
+
+  <!-- Formulario: crear (id = 0) o modificar (id > 0) -->
+  <dialog id="dlgLector">
+    <form id="formLector" novalidate>
+      <div class="dlg-cabecera"><h2 id="tituloLector">Nuevo lector</h2></div>
+      <div class="dlg-cuerpo dos">
+        <input type="hidden" id="idLector" value="0">
+        <div class="completo alerta error" id="alertaLector" hidden></div>
+
+        <label>
+          <span class="obligatorio">Matrícula</span>
+          <input type="text" id="matricula" maxlength="20" required>
+        </label>
+        <label id="grupoFolio" hidden>
+          Folio
+          <input type="text" id="folio" readonly>
+        </label>
+        <label class="completo">
+          <span class="obligatorio">Nombre completo</span>
+          <input type="text" id="nombre" maxlength="100" required>
+        </label>
+        <label>
+          Correo
+          <input type="email" id="correo" maxlength="100">
+        </label>
+        <label>
+          Teléfono
+          <input type="tel" id="telefono" maxlength="20">
+        </label>
+        <small class="completo" id="notaFolio" style="color:var(--texto-suave)">
+          El folio se genera automáticamente al guardar.
+        </small>
+      </div>
+      <div class="dlg-pie">
+        <button type="button" class="btn claro" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn principal" id="btnGuardarLector">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Cambiar estado: suspender, dar de baja o reactivar -->
+  <dialog id="dlgEstado">
+    <form id="formEstado">
+      <div class="dlg-cabecera"><h2>Cambiar estado del lector</h2></div>
+      <div class="dlg-cuerpo">
+        <input type="hidden" id="idEstado">
+        <p style="margin:0">Lector: <strong id="nombreEstado"></strong></p>
+        <div class="alerta error" id="alertaEstado" hidden></div>
+        <label>
+          Nuevo estado
+          <select id="nuevoEstado">
+            <option value="Activo">Activo</option>
+            <option value="Suspendido">Suspendido</option>
+            <option value="Baja">Baja</option>
+          </select>
+        </label>
+        <div class="alerta info">
+          Un lector suspendido o dado de baja no podrá solicitar préstamos.
+          No se puede dar de baja a un lector con préstamos activos.
+        </div>
+      </div>
+      <div class="dlg-pie">
+        <button type="button" class="btn claro" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn principal" id="btnGuardarEstado">Aplicar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toasts" class="toasts"></div>
+  <script src="/js/comun.js"></script>
+  <script src="/js/lectores.js"></script>
+</body>
+</html>

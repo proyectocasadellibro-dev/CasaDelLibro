@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Usuarios y roles · La Casa Del Libro</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="encabezado" id="encabezado"></header>
+
+  <main class="contenedor">
+    <div class="titulo-pagina">
+      <div>
+        <h1>Usuarios y roles</h1>
+        <p class="subtitulo">Administra las cuentas del personal y los roles del sistema. Solo visible para administradores.</p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <button type="button" class="btn" id="btnNuevoRol">+ Nuevo rol</button>
+        <button type="button" class="btn principal" id="btnNuevoUsuario">+ Nuevo usuario</button>
+      </div>
+    </div>
+
+    <!-- Usuarios -->
+    <section class="tarjeta">
+      <div class="barra">
+        <input type="search" id="buscar" placeholder="Buscar por nombre, usuario o correo…" autocomplete="off">
+        <select id="filtroRol" aria-label="Filtrar por rol">
+          <option value="">Todos los roles</option>
+        </select>
+        <select id="filtroEstado" aria-label="Filtrar por estado">
+          <option value="">Todos los estados</option>
+          <option value="1">Activos</option>
+          <option value="0">Inactivos</option>
+        </select>
+      </div>
+
+      <div class="tabla-envoltorio">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Usuario</th>
+              <th>Correo</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo"></tbody>
+        </table>
+      </div>
+      <p class="vacio" id="vacio" hidden>No se encontraron usuarios.</p>
+    </section>
+
+    <!-- Roles -->
+    <section class="tarjeta" style="margin-top:24px">
+      <div class="barra" style="align-items:center">
+        <h2 style="margin:0; font-size:1.1rem">Roles del sistema</h2>
+      </div>
+      <div class="tabla-envoltorio">
+        <table>
+          <thead>
+            <tr>
+              <th>Rol</th>
+              <th>Descripción</th>
+              <th class="num">Usuarios</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoRoles"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Formulario de usuario: crear (id = 0) o modificar (id > 0) -->
+  <dialog id="dlgUsuario">
+    <form id="formUsuario" novalidate>
+      <div class="dlg-cabecera"><h2 id="tituloUsuario">Nuevo usuario</h2></div>
+      <div class="dlg-cuerpo dos">
+        <input type="hidden" id="idUsuario" value="0">
+        <div class="completo alerta error" id="alertaUsuario" hidden></div>
+
+        <label class="completo">
+          <span class="obligatorio">Nombre completo</span>
+          <input type="text" id="nombreCompleto" maxlength="100" required>
+        </label>
+        <label>
+          <span class="obligatorio">Usuario</span>
+          <input type="text" id="nombreUsuario" maxlength="30" autocomplete="off" required>
+        </label>
+        <label>
+          <span class="obligatorio">Rol</span>
+          <select id="rolUsuario" required>
+            <option value="">Selecciona un rol</option>
+          </select>
+        </label>
+        <label class="completo">
+          <span class="obligatorio">Correo</span>
+          <input type="email" id="correoUsuario" maxlength="100" autocomplete="off" required>
+        </label>
+        <label>
+          <span id="etiquetaPassword" class="obligatorio">Contraseña</span>
+          <input type="password" id="passwordUsuario" maxlength="100" autocomplete="new-password">
+        </label>
+        <label>
+          Confirmar contraseña
+          <input type="password" id="confirmarPassword" maxlength="100" autocomplete="new-password">
+        </label>
+        <small class="completo" id="notaPassword" style="color:var(--texto-suave)">
+          Mínimo 8 caracteres.
+        </small>
+      </div>
+      <div class="dlg-pie">
+        <button type="button" class="btn claro" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn principal" id="btnGuardarUsuario">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Nuevo rol -->
+  <dialog id="dlgRol">
+    <form id="formRol" novalidate>
+      <div class="dlg-cabecera"><h2>Nuevo rol</h2></div>
+      <div class="dlg-cuerpo">
+        <div class="alerta error" id="alertaRol" hidden></div>
+        <label>
+          <span class="obligatorio">Nombre del rol</span>
+          <input type="text" id="nombreRol" maxlength="30" required>
+        </label>
+        <label>
+          Descripción <small>(opcional)</small>
+          <input type="text" id="descripcionRol" maxlength="200">
+        </label>
+        <div class="alerta info">
+          Un rol nuevo todavía no tiene acceso a ninguna pantalla. Los permisos de cada rol se
+          configuran en <strong>PERMISOS</strong>, dentro de <code>views/js/comun.js</code>.
+        </div>
+      </div>
+      <div class="dlg-pie">
+        <button type="button" class="btn claro" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn principal" id="btnGuardarRol">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toasts" class="toasts"></div>
+  <script src="/js/comun.js"></script>
+  <script src="/js/usuarios.js"></script>
+</body>
+</html>

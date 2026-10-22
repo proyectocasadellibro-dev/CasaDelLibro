@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Libros · La Casa Del Libro</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="encabezado" id="encabezado"></header>
+
+  <main class="contenedor">
+    <div class="titulo-pagina">
+      <div>
+        <h1>Libros</h1>
+        <p class="subtitulo">Registra y mantiene actualizado el catálogo de la biblioteca.</p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <button type="button" class="btn" id="btnNuevaCategoria" hidden>+ Nueva categoría</button>
+        <button type="button" class="btn principal" id="btnNuevo" hidden>+ Nuevo libro</button>
+      </div>
+    </div>
+
+    <section class="tarjeta">
+      <div class="barra">
+        <input type="search" id="buscar" placeholder="Buscar por título, autor, categoría o ISBN…" autocomplete="off">
+        <select id="filtroCategoria" aria-label="Filtrar por categoría">
+          <option value="">Todas las categorías</option>
+        </select>
+      </div>
+
+      <div class="tabla-envoltorio">
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Categoría</th>
+              <th>ISBN</th>
+              <th class="num">Disponibles / Total</th>
+              <th>Estado</th>
+              <th id="thAcciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo"></tbody>
+        </table>
+      </div>
+      <p class="vacio" id="vacio" hidden>No se encontraron libros.</p>
+    </section>
+  </main>
+
+  <!-- Formulario: crear (id = 0) o modificar (id > 0) -->
+  <dialog id="dlgLibro">
+    <form id="formLibro" novalidate>
+      <div class="dlg-cabecera"><h2 id="tituloLibro">Nuevo libro</h2></div>
+      <div class="dlg-cuerpo dos">
+        <input type="hidden" id="idLibro" value="0">
+        <div class="completo alerta error" id="alertaLibro" hidden></div>
+
+        <label class="completo">
+          <span class="obligatorio">Título</span>
+          <input type="text" id="titulo" maxlength="200" required>
+        </label>
+        <label class="completo">
+          <span class="obligatorio">Autor</span>
+          <input type="text" id="autor" maxlength="120" required>
+        </label>
+        <label>
+          Categoría
+          <select id="categoria">
+            <option value="">Sin categoría</option>
+          </select>
+        </label>
+        <label>
+          ISBN
+          <input type="text" id="isbn" maxlength="20">
+        </label>
+        <label>
+          <span class="obligatorio">Total de ejemplares</span>
+          <input type="number" id="total" min="1" step="1" value="1" required>
+        </label>
+        <div id="notaEjemplares" class="alerta info" hidden></div>
+      </div>
+      <div class="dlg-pie">
+        <button type="button" class="btn claro" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn principal" id="btnGuardarLibro">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Nueva categoría -->
+  <dialog id="dlgCategoria">
+    <form id="formCategoria" novalidate>
+      <div class="dlg-cabecera"><h2>Nueva categoría</h2></div>
+      <div class="dlg-cuerpo">
+        <div class="alerta error" id="alertaCategoria" hidden></div>
+        <label>
+          <span class="obligatorio">Nombre</span>
+          <input type="text" id="nombreCategoria" maxlength="60" required>
+        </label>
+        <label>
+          Descripción <small>(opcional)</small>
+          <input type="text" id="descripcionCategoria" maxlength="200">
+        </label>
+      </div>
+      <div class="dlg-pie">
+        <button type="button" class="btn claro" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn principal" id="btnGuardarCategoria">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toasts" class="toasts"></div>
+  <script src="/js/comun.js"></script>
+  <script src="/js/libros.js"></script>
+</body>
+</html>
