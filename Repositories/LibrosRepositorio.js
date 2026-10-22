@@ -37,4 +37,12 @@ async function listarCategorias() {
   return resultados[0];
 }
 
-module.exports = { guardar, obtenerPorId, buscar, consultarDisponibilidad, listarCategorias };
+async function guardarCategoria({ idCategoria, nombre, descripcion }) {
+  const [resultados] = await pool.query(
+    'CALL sp_GuardarCategoria(?, ?, ?)',
+    [idCategoria, nombre ?? null, descripcion ?? null]
+  );
+  return resultados[0][0] || null;
+}
+
+module.exports = { guardar, obtenerPorId, buscar, consultarDisponibilidad, listarCategorias, guardarCategoria };

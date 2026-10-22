@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión · La Casa Del Libro</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body class="pagina-login">
+  <main class="login-caja">
+    <div class="login-cabecera">
+      <div class="logo">📚</div>
+      <h1>La Casa Del Libro</h1>
+      <p>Sistema de registros bibliotecaria</p>
+    </div>
+
+    <form class="login-cuerpo" id="formLogin" novalidate>
+      <div class="alerta error" id="alertaLogin" role="alert" hidden></div>
+
+      <label>
+        Usuario
+        <input type="text" id="usuario" autocomplete="username" autofocus required>
+      </label>
+
+      <label>
+        Contraseña
+        <input type="password" id="password" autocomplete="current-password" required>
+      </label>
+
+      <button type="submit" class="btn principal" id="btnEntrar">Entrar</button>
+    </form>
+  </main>
+
+  <script src="/js/comun.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

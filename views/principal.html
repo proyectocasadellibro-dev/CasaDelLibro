@@ -2,52 +2,51 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Casa Del Libro | Principal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicio · La Casa Del Libro</title>
   <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
-  <header class="barra">
-    <h1>📚 La Casa Del Libro</h1>
-    <div class="barra-usuario">
-      <span id="nombreUsuario"></span>
-      <span id="rolUsuario" class="etiqueta"></span>
-      <button id="btnSalir" class="btn-salir">Cerrar sesión</button>
+  <header class="encabezado" id="encabezado"></header>
+
+  <main class="contenedor">
+    <div class="titulo-pagina">
+      <div>
+        <h1 id="saludo">Bienvenido</h1>
+        <p class="subtitulo">¿Qué quieres hacer hoy?</p>
+      </div>
     </div>
-  </header>
 
-  <main class="contenido">
-    <h2 id="bienvenida">Bienvenido</h2>
-    <p>Selecciona un módulo para comenzar.</p>
+    <div class="alerta info" id="avisoConsulta" style="margin-bottom:18px" hidden>
+      Tu rol es de consulta: puedes ver la información, pero no modificarla.
+    </div>
 
-    <section class="tarjetas">
-      <!-- data-roles: roles que pueden ver cada módulo -->
-      <article class="tarjeta" data-roles="Administrador">
-        <h3>👥 Usuarios del sistema</h3>
-        <p>Cuentas, roles y permisos del personal.</p>
-        <small>Próximamente</small>
-      </article>
-
-      <article class="tarjeta" data-roles="Administrador,Empleado">
-        <h3>🔄 Préstamos y devoluciones</h3>
-        <p>Registrar préstamos y devoluciones de libros.</p>
-        <small>Próximamente</small>
-      </article>
-
-      <article class="tarjeta" data-roles="Administrador,Empleado">
-        <h3>📖 Libros y lectores</h3>
-        <p>Catálogo, disponibilidad y registro de lectores.</p>
-        <small>Próximamente</small>
-      </article>
-
-      <article class="tarjeta" data-roles="Administrador,Gerente">
-        <h3>📊 Reportes</h3>
-        <p>Préstamos por periodo y libros más solicitados.</p>
-        <small>Próximamente</small>
-      </article>
-    </section>
+    <div class="menu-tarjetas">
+      <a class="opcion" href="/lectores.html">
+        <div class="icono">👥</div>
+        <h2>Lectores</h2>
+        <p>Registra lectores, busca por nombre, matrícula o folio, y suspende o da de baja cuentas.</p>
+      </a>
+      <a class="opcion" href="/libros.html">
+        <div class="icono">📖</div>
+        <h2>Libros</h2>
+        <p>Da de alta libros, actualiza su información y administra los ejemplares del catálogo.</p>
+      </a>
+      <a class="opcion" href="/disponibilidad.html">
+        <div class="icono">✅</div>
+        <h2>Disponibilidad</h2>
+        <p>Consulta qué libros están disponibles, prestados o no disponibles.</p>
+      </a>
+      <a class="opcion" href="/usuarios.html" id="opcionUsuarios" hidden>
+        <div class="icono">🔐</div>
+        <h2>Usuarios y roles</h2>
+        <p>Administra las cuentas del personal y crea nuevos roles. Solo para administradores.</p>
+      </a>
+    </div>
   </main>
 
+  <div id="toasts" class="toasts"></div>
+  <script src="/js/comun.js"></script>
   <script src="/js/principal.js"></script>
 </body>
 </html>

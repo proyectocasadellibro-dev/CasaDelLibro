@@ -1,5 +1,5 @@
-
-const usuariosRepo = require('../Repositories/UsuariosRepositorio');
+// controller/authController.js
+const usuariosRepo = require('../Repositories/usuariosRepositorio');
 
 async function login(req, res) {
   const { usuario, password } = req.body || {};
@@ -32,8 +32,16 @@ async function login(req, res) {
   }
 }
 
+// GET /api/sesion  -> devuelve el usuario con sesión activa (lo usa el frontend en cada pantalla)
+function sesion(req, res) {
+  if (!req.session || !req.session.usuario) {
+    return res.status(401).json({ ok: false, mensaje: 'No hay una sesión activa.' });
+  }
+  res.json({ ok: true, usuario: req.session.usuario });
+}
+
 function logout(req, res) {
   req.session.destroy(() => res.json({ ok: true }));
 }
 
-module.exports = { login, logout };
+module.exports = { login, logout, sesion };
