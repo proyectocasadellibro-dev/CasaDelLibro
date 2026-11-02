@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Préstamos · La Casa Del Libro</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="encabezado" id="encabezado"></header>
+
+  <main class="contenedor">
+    <div class="titulo-pagina">
+      <div>
+        <h1>Préstamos y devoluciones</h1>
+        <p class="subtitulo">Registra préstamos, controla las fechas límite y recibe las devoluciones.</p>
+      </div>
+      <button type="button" class="btn principal" id="btnNuevo" hidden>+ Nuevo préstamo</button>
+    </div>
+
+    <div class="resumen">
+      <div class="dato verde"><div class="numero" id="cntActivos">0</div><div class="etiqueta">Préstamos vigentes</div></div>
+      <div class="dato rojo"><div class="numero" id="cntVencidos">0</div><div class="etiqueta">Préstamos vencidos</div></div>
+    </div>
+
+    <section class="tarjeta">
+      <div class="barra">
+        <input type="search" id="buscar" placeholder="Buscar por lector, matrícula, folio, título o autor…" autocomplete="off">
+        <select id="filtroEstado" aria-label="Filtrar por estado">
+          <option value="Pendientes">Pendientes (vigentes y vencidos)</option>
+          <option value="Vencido">Solo vencidos</option>
+          <option value="Devuelto">Devueltos</option>
+          <option value="">Historial completo</option>
+        </select>
+      </div>
+
+      <div class="tabla-envoltorio">
+        <table>
+          <thead>
+            <tr>
+              <th>Lector</th>
+              <th>Libro</th>
+              <th>Préstamo</th>
+              <th>Fecha límite</th>
+              <th>Devolución</th>
+              <th>Estado</th>
+              <th id="thAcciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo"></tbody>
+        </table>
+      </div>
+      <p class="vacio" id="vacio" hidden>No se encontraron préstamos.</p>
+    </section>
+  </main>
+
+  <!-- Nuevo préstamo -->
+  <dialog id="dlgPrestamo">
+    <form id="formPrestamo" novalidate>
+      <div class="dlg-cabecera"><h2>Nuevo préstamo</h2></div>
+      <div class="dlg-cuerpo">
+        <div class="alerta error" id="alertaPrestamo" hidden></div>
+
+        <label>
+          <span class="obligatorio">Lector</span>
+          <input type="text" id="lector" list="listaLectores" autocomplete="off"
+                 placeholder="Escribe matrícula, folio o nombre y elige de la lista">
+          <datalist id="listaLectores"></datalist>
+        </label>
+
+        <label>
+          <span class="obligatorio">Libro</span>
+          <input type="text" id="libro" list="listaLibros" autocomplete="off"
+                 placeholder="Escribe título o autor y elige de la lista">
+          <datalist id="listaLibros"></datalist>
+          <small>Solo aparecen libros con ejemplares disponibles.</small>
+        </label>
+
+        <label>
+          Plazo (días)
+          <input type="number" id="dias" min="1" max="30" step="1" value="7">
+          <small>Vence a las 23:59 del último día. Máximo 30 días.</small>
+        </label>
+
+        <div class="alerta info">
+          Cada lector puede tener hasta 3 préstamos activos. No se presta a lectores
+          suspendidos, dados de baja o con préstamos vencidos.
+        </div>
+      </div>
+      <div class="dlg-pie">
+        <button type="button" class="btn claro" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn principal" id="btnGuardarPrestamo">Registrar préstamo</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toasts" class="toasts"></div>
+  <script src="/js/comun.js"></script>
+  <script src="/js/prestamos.js"></script>
+</body>
+</html>
