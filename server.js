@@ -10,10 +10,12 @@ const lectoresController = require('./Controllers/lectoresController');
 const librosController   = require('./Controllers/librosController');
 const usuariosController = require('./Controllers/usuariosController');
 const rolesController    = require('./Controllers/rolesController');
+const prestamosController = require('./Controllers/prestamosController');
 
 // Autorización por rol
-const { requiereRol } = require('./Middleware/autorizacion');
-const soloAdmin = requiereRol('Administrador');
+const { requiereRol, requiereSesion } = require('./Middleware/autorizacion');
+const soloAdmin   = requiereRol('Administrador');
+const puedeOperar = requiereRol('Administrador', 'Empleado');   // el Gerente solo consulta
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,6 +52,12 @@ app.get('/api/libros/:id',            librosController.obtener);
 // ---------- Categorías ----------
 app.get('/api/categorias',            librosController.categorias);
 app.post('/api/categorias',           librosController.guardarCategoria); // id 0 crea, id > 0 modifica
+
+// ---------- Préstamos y devoluciones ----------
+// Consultar: cualquier usuario con sesión. Registrar y devolver: Administrador y Empleado.
+app.get('/api/prestamos',                  requiereSesion, prestamosController.listar);
+app.post('/api/prestamos',                 puedeOperar,    prestamosController.registrar);
+app.patch('/api/prestamos/:id/devolucion', puedeOperar,    prestamosController.devolver);
 
 // ---------- Usuarios y roles (SOLO Administrador: responde 401 sin sesión y 403 sin permiso) ----------
 app.get('/api/usuarios',              soloAdmin, usuariosController.listar);

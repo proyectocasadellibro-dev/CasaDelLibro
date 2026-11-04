@@ -276,3 +276,46 @@ body.pagina-login {
 .opcion .icono { font-size: 2rem; }
 .opcion h2 { margin: 10px 0 4px; font-size: 1.15rem; color: var(--principal); }
 .opcion p { margin: 0; color: var(--texto-suave); font-size: .92rem; }
+
+/*---prestamos y devoluciones---*/
+.seccion-prestamo {
+  margin-bottom: 22px;
+}
+
+.form-prestamo {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.form-prestamo .alerta {
+  grid-column: 1 / -1;
+}
+
+.form-accion {
+  display: flex;
+  align-items: end;
+}
+
+.nota-form {
+  color: var(--texto-suave);
+  font-size: .88rem;
+  padding: 0 20px 16px;
+  margin: 0;
+}
+
+.seccion-historial {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 760px) {
+  .form-prestamo {
+    grid-template-columns: 1fr;
+  }
+
+  .form-prestamo .alerta {
+    grid-column: auto;
+  }
+}
