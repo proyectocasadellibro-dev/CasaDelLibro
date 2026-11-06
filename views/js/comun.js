@@ -76,7 +76,7 @@ function debounce(funcion, espera = 300) {
 const CLASES_BADGE = {
   'Activo': 'verde', 'Suspendido': 'amarillo', 'Baja': 'rojo',
   'Disponible': 'verde', 'Prestado': 'amarillo', 'No disponible': 'rojo',
-  'Dañado': 'rojo', 'Extraviado': 'rojo', 'Inactivo': 'rojo', 'Vencido': 'rojo', 'Devuelto': 'gris'
+  'Dañado': 'rojo', 'Extraviado': 'rojo', 'Inactivo': 'rojo', 'Vencido': 'rojo', 'Devuelto': 'gris', 'Devuelto con daños': 'amarillo'
 };
 
 function badge(texto) {

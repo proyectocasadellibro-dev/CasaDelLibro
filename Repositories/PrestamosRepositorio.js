@@ -12,13 +12,19 @@ async function registrar({ idLector, idLibro, idUsuario, dias }) {
   return resultados[0][0] || null;
 }
 
-// Registra la devolución. Devuelve { Codigo, Mensaje, DiasRetraso } o null
-async function devolver(idPrestamo) {
-  const [resultados] = await pool.query('CALL sp_RegistrarDevolucion(?)', [idPrestamo]);
+// Registra la devolución con el estado del libro.
+// condicion: 'Buen estado' | 'Con daños' | 'Extraviado'
+// Devuelve { Codigo, Mensaje, DiasRetraso, Condicion } o null
+async function devolver({ idPrestamo, condicion, observaciones, idUsuario }) {
+  const [resultados] = await pool.query(
+    'CALL sp_RegistrarDevolucion(?, ?, ?, ?)',
+    [idPrestamo, condicion ?? null, observaciones ?? null, idUsuario]
+  );
   return resultados[0][0] || null;
 }
 
 // estado: null | 'Pendientes' | 'Activo' | 'Vencido' | 'Devuelto'
+//         | 'Incidencias' | 'Devuelto con daños' | 'Extraviado'
 async function listar(termino, estado, idLector) {
   const [resultados] = await pool.query(
     'CALL sp_ListarPrestamos(?, ?, ?)',

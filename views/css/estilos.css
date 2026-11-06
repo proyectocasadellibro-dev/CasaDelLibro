@@ -277,45 +277,29 @@ body.pagina-login {
 .opcion h2 { margin: 10px 0 4px; font-size: 1.15rem; color: var(--principal); }
 .opcion p { margin: 0; color: var(--texto-suave); font-size: .92rem; }
 
-/*---prestamos y devoluciones---*/
-.seccion-prestamo {
-  margin-bottom: 22px;
+/* ---------- Texto largo y ficha de datos (ventanas de devolución y reportes) ---------- */
+textarea {
+  font: inherit;
+  padding: 9px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--texto);
+  width: 100%;
+  min-height: 78px;
+  resize: vertical;
 }
-
-.form-prestamo {
-  padding: 20px;
+textarea:focus {
+  outline: 2px solid rgba(142,31,67,.35);
+  border-color: var(--principal);
+}
+.ficha {
+  background: #faf7f6;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 12px 14px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(180px, 1fr));
-  gap: 16px;
-  align-items: end;
+  gap: 4px;
+  font-size: .92rem;
 }
-
-.form-prestamo .alerta {
-  grid-column: 1 / -1;
-}
-
-.form-accion {
-  display: flex;
-  align-items: end;
-}
-
-.nota-form {
-  color: var(--texto-suave);
-  font-size: .88rem;
-  padding: 0 20px 16px;
-  margin: 0;
-}
-
-.seccion-historial {
-  margin-bottom: 18px;
-}
-
-@media (max-width: 760px) {
-  .form-prestamo {
-    grid-template-columns: 1fr;
-  }
-
-  .form-prestamo .alerta {
-    grid-column: auto;
-  }
-}
+.ficha span { color: var(--texto-suave); }
