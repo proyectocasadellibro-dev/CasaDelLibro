@@ -13,23 +13,29 @@
     <div class="titulo-pagina">
       <div>
         <h1>Préstamos y devoluciones</h1>
-        <p class="subtitulo">Registra préstamos, controla las fechas límite y recibe las devoluciones.</p>
+        <p class="subtitulo">Registra préstamos, controla las fechas límite, recibe devoluciones y reporta libros dañados o extraviados.</p>
       </div>
-      <button type="button" class="btn principal" id="btnNuevo" hidden>+ Nuevo préstamo</button>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <button type="button" class="btn" id="btnIncidencia" hidden>Reportar dañado o extraviado</button>
+        <button type="button" class="btn principal" id="btnNuevo" hidden>+ Nuevo préstamo</button>
+      </div>
     </div>
 
     <div class="resumen">
       <div class="dato verde"><div class="numero" id="cntActivos">0</div><div class="etiqueta">Préstamos vigentes</div></div>
-      <div class="dato rojo"><div class="numero" id="cntVencidos">0</div><div class="etiqueta">Préstamos vencidos</div></div>
+      <div class="dato amarillo"><div class="numero" id="cntVencidos">0</div><div class="etiqueta">Préstamos vencidos</div></div>
+      <div class="dato rojo"><div class="numero" id="cntIncidencias">0</div><div class="etiqueta">Libros dañados o extraviados</div></div>
     </div>
 
+    <!-- Préstamos -->
     <section class="tarjeta">
       <div class="barra">
         <input type="search" id="buscar" placeholder="Buscar por lector, matrícula, folio, título o autor…" autocomplete="off">
         <select id="filtroEstado" aria-label="Filtrar por estado">
           <option value="Pendientes">Pendientes (vigentes y vencidos)</option>
           <option value="Vencido">Solo vencidos</option>
-          <option value="Devuelto">Devueltos</option>
+          <option value="Devuelto">Devueltos en buen estado</option>
+          <option value="Incidencias">Devueltos con daños o extraviados</option>
           <option value="">Historial completo</option>
         </select>
       </div>
@@ -51,6 +57,30 @@
         </table>
       </div>
       <p class="vacio" id="vacio" hidden>No se encontraron préstamos.</p>
+    </section>
+
+    <!-- Libros dañados o extraviados -->
+    <section class="tarjeta" style="margin-top:24px">
+      <div class="barra" style="align-items:center">
+        <h2 style="margin:0; font-size:1.1rem">Libros dañados o extraviados</h2>
+      </div>
+      <div class="tabla-envoltorio">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Libro</th>
+              <th>Tipo</th>
+              <th class="num">Cant.</th>
+              <th>Lector que lo tenía</th>
+              <th>Observaciones</th>
+              <th>Registró</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoIncidencias"></tbody>
+        </table>
+      </div>
+      <p class="vacio" id="vacioIncidencias" hidden>No hay libros dañados o extraviados registrados.</p>
     </section>
   </main>
 
@@ -90,6 +120,89 @@
       <div class="dlg-pie">
         <button type="button" class="btn claro" data-cerrar>Cancelar</button>
         <button type="submit" class="btn principal" id="btnGuardarPrestamo">Registrar préstamo</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Registrar devolución (con el estado del libro) -->
+  <dialog id="dlgDevolucion">
+    <form id="formDevolucion" novalidate>
+      <div class="dlg-cabecera"><h2>Registrar devolución</h2></div>
+      <div class="dlg-cuerpo">
+        <div class="alerta error" id="alertaDevolucion" hidden></div>
+
+        <div class="ficha">
+          <div><span>Lector:</span> <strong id="devLector"></strong></div>
+          <div><span>Libro:</span> <strong id="devLibro"></strong></div>
+          <div><span>Fecha límite:</span> <strong id="devLimite"></strong></div>
+        </div>
+
+        <label>
+          <span class="obligatorio">Estado en que regresa el libro</span>
+          <select id="condicion">
+            <option value="Buen estado">Buen estado</option>
+            <option value="Con daños">Con daños</option>
+            <option value="Extraviado">Extraviado (no lo devolvió)</option>
+          </select>
+        </label>
+
+        <label>
+          Observaciones <small>(opcional)</small>
+          <textarea id="observacionesDev" maxlength="300"
+                    placeholder="Ej. Hojas arrancadas, portada mojada, el lector reportó pérdida…"></textarea>
+        </label>
+
+        <div id="avisoCondicion" class="alerta info" hidden></div>
+      </div>
+      <div class="dlg-pie">
+        <button type="button" class="btn claro" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn principal" id="btnGuardarDevolucion">Registrar devolución</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Reportar libro dañado o extraviado (que no estaba prestado) -->
+  <dialog id="dlgIncidencia">
+    <form id="formIncidencia" novalidate>
+      <div class="dlg-cabecera"><h2>Reportar libro dañado o extraviado</h2></div>
+      <div class="dlg-cuerpo">
+        <div class="alerta error" id="alertaIncidencia" hidden></div>
+
+        <label>
+          <span class="obligatorio">Libro</span>
+          <input type="text" id="libroIncidencia" list="listaLibrosIncidencia" autocomplete="off"
+                 placeholder="Escribe título o autor y elige de la lista">
+          <datalist id="listaLibrosIncidencia"></datalist>
+        </label>
+
+        <label>
+          <span class="obligatorio">Tipo de reporte</span>
+          <select id="tipoIncidencia">
+            <option value="Dañado">Dañado</option>
+            <option value="Extraviado">Extraviado</option>
+          </select>
+        </label>
+
+        <label>
+          <span class="obligatorio">Ejemplares afectados</span>
+          <input type="number" id="cantidadIncidencia" min="1" step="1" value="1">
+        </label>
+
+        <label>
+          Observaciones <small>(opcional)</small>
+          <textarea id="observacionesIncidencia" maxlength="300"
+                    placeholder="Describe qué pasó con el libro…"></textarea>
+        </label>
+
+        <div class="alerta info">
+          Aquí se reportan ejemplares que están en la biblioteca. Si el libro lo tenía un lector,
+          regístralo al recibir su devolución para que quede en su historial.
+          Los ejemplares reportados salen del inventario y ya no se pueden prestar.
+        </div>
+      </div>
+      <div class="dlg-pie">
+        <button type="button" class="btn claro" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn principal" id="btnGuardarIncidencia">Registrar reporte</button>
       </div>
     </form>
   </dialog>

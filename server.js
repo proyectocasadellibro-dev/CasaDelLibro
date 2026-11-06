@@ -10,7 +10,8 @@ const lectoresController = require('./Controllers/lectoresController');
 const librosController   = require('./Controllers/librosController');
 const usuariosController = require('./Controllers/usuariosController');
 const rolesController    = require('./Controllers/rolesController');
-const prestamosController = require('./Controllers/prestamosController');
+const prestamosController  = require('./Controllers/prestamosController');
+const incidenciasController = require('./Controllers/incidenciasController');
 
 // Autorización por rol
 const { requiereRol, requiereSesion } = require('./Middleware/autorizacion');
@@ -58,6 +59,10 @@ app.post('/api/categorias',           librosController.guardarCategoria); // id 
 app.get('/api/prestamos',                  requiereSesion, prestamosController.listar);
 app.post('/api/prestamos',                 puedeOperar,    prestamosController.registrar);
 app.patch('/api/prestamos/:id/devolucion', puedeOperar,    prestamosController.devolver);
+
+// ---------- Libros dañados o extraviados ----------
+app.get('/api/incidencias',                requiereSesion, incidenciasController.listar);
+app.post('/api/incidencias',               puedeOperar,    incidenciasController.registrar);
 
 // ---------- Usuarios y roles (SOLO Administrador: responde 401 sin sesión y 403 sin permiso) ----------
 app.get('/api/usuarios',              soloAdmin, usuariosController.listar);

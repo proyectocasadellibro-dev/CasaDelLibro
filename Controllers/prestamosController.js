@@ -1,8 +1,12 @@
 // Controllers/prestamosController.js
-const prestamosRepo = require('../Repositories/prestamosRepositorio');
+const prestamosRepo = require('../Repositories/PrestamosRepositorio');
 const { estadoHttp, leerId } = require('./helpers');
 
-const ESTADOS_VALIDOS = ['Pendientes', 'Activo', 'Vencido', 'Devuelto'];
+const ESTADOS_VALIDOS = [
+  'Pendientes', 'Activo', 'Vencido', 'Devuelto',
+  'Incidencias', 'Devuelto con daños', 'Extraviado'
+];
+const CONDICIONES = ['Buen estado', 'Con daños', 'Extraviado'];
 
 // GET /api/prestamos?q=texto&estado=Pendientes&lector=3
 async function listar(req, res) {
@@ -66,6 +70,8 @@ async function registrar(req, res) {
 }
 
 // PATCH /api/prestamos/:id/devolucion
+// Body: { condicion, observaciones }
+//   condicion: 'Buen estado' (por defecto) | 'Con daños' | 'Extraviado'
 async function devolver(req, res) {
   try {
     const id = leerId(req.params.id);
@@ -73,7 +79,23 @@ async function devolver(req, res) {
       return res.status(400).json({ ok: false, mensaje: 'El id del préstamo no es válido.' });
     }
 
-    const fila = await prestamosRepo.devolver(id);
+    const { condicion, observaciones } = req.body || {};
+
+    const estadoLibro = condicion || 'Buen estado';
+    if (!CONDICIONES.includes(estadoLibro)) {
+      return res.status(400).json({ ok: false, mensaje: 'El estado del libro no es válido.' });
+    }
+    if (observaciones && String(observaciones).length > 300) {
+      return res.status(400).json({ ok: false, mensaje: 'Las observaciones no pueden tener más de 300 caracteres.' });
+    }
+
+    const fila = await prestamosRepo.devolver({
+      idPrestamo: id,
+      condicion: estadoLibro,
+      observaciones: observaciones ? String(observaciones) : null,
+      idUsuario: req.session.usuario.id
+    });
+
     if (!fila) {
       return res.status(500).json({ ok: false, mensaje: 'No se pudo registrar la devolución.' });
     }
@@ -81,7 +103,12 @@ async function devolver(req, res) {
       return res.status(estadoHttp(fila.Codigo)).json({ ok: false, mensaje: fila.Mensaje });
     }
 
-    res.json({ ok: true, mensaje: fila.Mensaje, diasRetraso: fila.DiasRetraso });
+    res.json({
+      ok: true,
+      mensaje: fila.Mensaje,
+      diasRetraso: fila.DiasRetraso,
+      condicion: fila.Condicion
+    });
   } catch (err) {
     console.error('Error al registrar devolución:', err.message);
     res.status(500).json({ ok: false, mensaje: 'Error en el servidor.' });
