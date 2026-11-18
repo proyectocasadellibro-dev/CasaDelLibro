@@ -18,6 +18,7 @@ const MENU = [
   { pagina: 'libros',         texto: 'Libros',         url: '/libros.html' },
   { pagina: 'prestamos',      texto: 'Préstamos',      url: '/prestamos.html' },
   { pagina: 'disponibilidad', texto: 'Disponibilidad', url: '/disponibilidad.html' },
+  { pagina: 'reportes',       texto: 'Reportes',       url: '/reportes.html', roles: ['Administrador', 'Gerente'] },
   { pagina: 'usuarios',       texto: 'Usuarios',       url: '/usuarios.html', roles: ['Administrador'] }
 ];
 
@@ -76,7 +77,9 @@ function debounce(funcion, espera = 300) {
 const CLASES_BADGE = {
   'Activo': 'verde', 'Suspendido': 'amarillo', 'Baja': 'rojo',
   'Disponible': 'verde', 'Prestado': 'amarillo', 'No disponible': 'rojo',
-  'Dañado': 'rojo', 'Extraviado': 'rojo', 'Inactivo': 'rojo', 'Vencido': 'rojo', 'Devuelto': 'gris', 'Devuelto con daños': 'amarillo'
+  'Dañado': 'rojo', 'Extraviado': 'rojo', 'Inactivo': 'rojo', 'Vencido': 'rojo', 'Devuelto': 'gris', 'Devuelto con daños': 'amarillo',
+  'Préstamo': 'verde', 'Devolución': 'gris', 'Devolución con daños': 'amarillo',
+  'Libro extraviado': 'rojo', 'Reporte dañado': 'amarillo', 'Reporte extraviado': 'rojo'
 };
 
 function badge(texto) {

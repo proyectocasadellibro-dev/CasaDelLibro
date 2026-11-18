@@ -9,40 +9,67 @@
 <body>
   <header class="encabezado" id="encabezado"></header>
 
-  <main class="contenedor">
+  <div class="inicio">
+    <!-- Barra lateral con los módulos -->
+    <aside class="lateral" aria-label="Módulos del sistema">
+      <p class="lateral-titulo">Módulos</p>
+      <nav>
+        <a href="/lectores.html">
+          <span class="ico">👥</span>
+          <span><strong>Lectores</strong><small>Registro y búsqueda</small></span>
+        </a>
+        <a href="/libros.html">
+          <span class="ico">📖</span>
+          <span><strong>Libros</strong><small>Catálogo y ejemplares</small></span>
+        </a>
+        <a href="/prestamos.html">
+          <span class="ico">🔄</span>
+          <span><strong>Préstamos</strong><small>Préstamos y devoluciones</small></span>
+        </a>
+        <a href="/disponibilidad.html">
+          <span class="ico">✅</span>
+          <span><strong>Disponibilidad</strong><small>Qué libros se pueden prestar</small></span>
+        </a>
+        <a href="/reportes.html" id="opcionReportes" hidden>
+          <span class="ico">📊</span>
+          <span><strong>Reportes</strong><small>Consultas y documentos</small></span>
+        </a>
+        <a href="/usuarios.html" id="opcionUsuarios" hidden>
+          <span class="ico">🔐</span>
+          <span><strong>Usuarios y roles</strong><small>Cuentas del personal</small></span>
+        </a>
+      </nav>
+    </aside>
 
-    <div class="alerta info" id="avisoConsulta" style="margin-bottom:18px" hidden>
-      Tu rol es de consulta: puedes ver la información, pero no modificarla.
-    </div>
+    <!-- Contenido -->
+    <section class="panel">
+      <div class="titulo-pagina">
+        <div>
+          <h1 id="saludo">Bienvenido</h1>
+          <p class="subtitulo">Resumen de la actividad de la biblioteca.</p>
+        </div>
+      </div>
 
-    <div class="menu-tarjetas">
-      <a class="opcion" href="/lectores.html">
-        <div class="icono">👥</div>
-        <h2>Lectores</h2>
-        <p>Registra lectores, busca por nombre, matrícula o folio, y suspende o da de baja cuentas.</p>
-      </a>
-      <a class="opcion" href="/libros.html">
-        <div class="icono">📖</div>
-        <h2>Libros</h2>
-        <p>Da de alta libros, actualiza su información y administra los ejemplares del catálogo.</p>
-      </a>
-      <a class="opcion" href="/prestamos.html">
-        <div class="icono">🔄</div>
-        <h2>Préstamos</h2>
-        <p>Registra préstamos y devoluciones, y consulta los vencidos y el historial.</p>
-      </a>
-      <a class="opcion" href="/disponibilidad.html">
-        <div class="icono">✅</div>
-        <h2>Disponibilidad</h2>
-        <p>Consulta qué libros están disponibles, prestados o no disponibles.</p>
-      </a>
-      <a class="opcion" href="/usuarios.html" id="opcionUsuarios" hidden>
-        <div class="icono">🔐</div>
-        <h2>Usuarios y roles</h2>
-        <p>Administra las cuentas del personal y crea nuevos roles. Solo para administradores.</p>
-      </a>
-    </div>
-  </main>
+      <div class="alerta info" id="avisoConsulta" style="margin-bottom:18px" hidden>
+        Tu rol es de consulta: puedes ver la información, pero no modificarla.
+      </div>
+
+      <section class="tarjeta">
+        <div class="grafica-encabezado">
+          <h2>Los 3 libros más solicitados</h2>
+          <select id="periodo" aria-label="Periodo de la gráfica">
+            <option value="">Todo el historial</option>
+            <option value="30">Últimos 30 días</option>
+            <option value="90">Últimos 90 días</option>
+            <option value="365">Último año</option>
+          </select>
+        </div>
+        <div class="grafica-cuerpo" id="grafica">
+          <p class="vacio">Cargando…</p>
+        </div>
+      </section>
+    </section>
+  </div>
 
   <div id="toasts" class="toasts"></div>
   <script src="/js/comun.js"></script>

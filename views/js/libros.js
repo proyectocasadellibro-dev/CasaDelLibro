@@ -5,6 +5,7 @@
 
   const cuerpo = $('#cuerpo');
   const dlgLibro = $('#dlgLibro');
+  let libroActual = null;   // libro que se está editando: { total, disponibles }
 
   if (usuario.puedeEditar) {
     $('#btnNuevo').hidden = false;
@@ -78,7 +79,77 @@
     elemento.hidden = !mensaje;
   }
 
+  // ---------- Libros dañados o extraviados (solo al editar) ----------
+  // Cuántos ejemplares quedarían disponibles después de guardar los cambios del formulario
+  function disponiblesTrasEditar() {
+    if (!libroActual) return 0;
+    const prestados = libroActual.total - libroActual.disponibles;
+    const total = Number($('#total').value);
+    return Number.isInteger(total) ? total - prestados : 0;
+  }
+
+  function actualizarReporte() {
+    const tipo = $('#estadoReporte').value;
+    const activo = tipo !== '';
+    const resumen = $('#resumenReporte');
+
+    for (const id of ['#cantidadReporte', '#menosCantidad', '#masCantidad', '#observacionesReporte']) {
+      $(id).disabled = !activo;
+    }
+
+    if (!activo || !libroActual) {
+      resumen.hidden = true;
+      return;
+    }
+
+    const disponibles = disponiblesTrasEditar();
+    const cantidad = Number($('#cantidadReporte').value);
+    $('#cantidadReporte').max = String(Math.max(disponibles, 1));
+    resumen.hidden = false;
+
+    if (disponibles < 1) {
+      resumen.className = 'alerta error';
+      resumen.textContent = 'No hay ejemplares disponibles para reportar. Si el libro lo tiene un lector, '
+        + 'regístralo al recibir su devolución en Préstamos.';
+    } else if (!Number.isInteger(cantidad) || cantidad < 1 || cantidad > disponibles) {
+      resumen.className = 'alerta error';
+      resumen.textContent = `La cantidad debe ser de 1 a ${disponibles} (ejemplares disponibles).`;
+    } else {
+      const total = Number($('#total').value);
+      resumen.className = 'alerta info';
+      resumen.textContent = `Al guardar se restarán ${cantidad} ejemplar(es) del total y de los disponibles: `
+        + `quedarán ${total - cantidad} en total y ${disponibles - cantidad} disponibles.`;
+    }
+  }
+
+  function reiniciarReporte() {
+    $('#estadoReporte').value = '';
+    $('#cantidadReporte').value = '1';
+    $('#observacionesReporte').value = '';
+    actualizarReporte();
+  }
+
+  $('#estadoReporte').addEventListener('change', () => {
+    $('#cantidadReporte').value = '1';          // el contador siempre empieza en 1
+    actualizarReporte();
+  });
+  $('#cantidadReporte').addEventListener('input', actualizarReporte);
+  $('#total').addEventListener('input', actualizarReporte);
+
+  $('#menosCantidad').addEventListener('click', () => {
+    $('#cantidadReporte').value = String(Math.max((Number($('#cantidadReporte').value) || 1) - 1, 1));
+    actualizarReporte();
+  });
+  $('#masCantidad').addEventListener('click', () => {
+    const limite = Math.max(disponiblesTrasEditar(), 1);
+    $('#cantidadReporte').value = String(Math.min((Number($('#cantidadReporte').value) || 1) + 1, limite));
+    actualizarReporte();
+  });
+
   function abrirNuevo() {
+    libroActual = null;
+    $('#seccionReporte').hidden = true;
+    reiniciarReporte();
     $('#formLibro').reset();
     $('#idLibro').value = '0';              // id 0 = crear
     $('#tituloLibro').textContent = 'Nuevo libro';
@@ -116,6 +187,10 @@
     nota.hidden = prestados === 0;
     nota.textContent = `Hay ${prestados} ejemplar(es) prestado(s): el total no puede ser menor.`;
 
+    libroActual = { total: b.TotalEjemplares, disponibles: b.EjemplaresDisponibles };
+    $('#seccionReporte').hidden = false;
+    reiniciarReporte();
+
     mostrarAlerta($('#alertaLibro'), '');
     dlgLibro.showModal();
   }
@@ -145,17 +220,58 @@
       return;
     }
 
+    // ¿Se reportan ejemplares dañados o extraviados?
+    const tipoReporte = libroActual ? $('#estadoReporte').value : '';
+    const cantidad = Number($('#cantidadReporte').value);
+    if (tipoReporte) {
+      const disponibles = disponiblesTrasEditar();
+      if (disponibles < 1) {
+        mostrarAlerta(alerta, 'No hay ejemplares disponibles para reportar. Si el libro lo tiene un lector, '
+          + 'regístralo al recibir su devolución en Préstamos.');
+        return;
+      }
+      if (!Number.isInteger(cantidad) || cantidad < 1 || cantidad > disponibles) {
+        mostrarAlerta(alerta, `La cantidad de ejemplares ${tipoReporte.toLowerCase()}s debe ser de 1 a ${disponibles}.`);
+        return;
+      }
+    }
+
     const boton = $('#btnGuardarLibro');
     boton.disabled = true;
     const r = await api('/api/libros', { method: 'POST', body: datos });
-    boton.disabled = false;
 
     if (!r.ok) {
+      boton.disabled = false;
       mostrarAlerta(alerta, r.mensaje || 'No se pudo guardar el libro.');
       if (r.estado === 404) cargarLibros();   // el libro ya no existe
       return;
     }
 
+    // Con los datos guardados, se registran los ejemplares dañados o extraviados:
+    // se restan del total y de los disponibles.
+    if (tipoReporte) {
+      const reporte = await api('/api/incidencias', {
+        method: 'POST',
+        body: {
+          idLibro: datos.idLibro,
+          tipo: tipoReporte,
+          cantidad,
+          observaciones: $('#observacionesReporte').value.trim()
+        }
+      });
+      boton.disabled = false;
+      dlgLibro.close();
+      cargarLibros();
+
+      if (!reporte.ok) {
+        toast(`Los datos del libro se guardaron, pero el reporte no: ${reporte.mensaje || 'error desconocido'}`, 'error');
+        return;
+      }
+      toast(`${r.mensaje} ${reporte.mensaje}`);
+      return;
+    }
+
+    boton.disabled = false;
     dlgLibro.close();
     toast(r.mensaje);
     cargarLibros();

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reportes · La Casa Del Libro</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="encabezado" id="encabezado"></header>
+
+  <main class="contenedor">
+    <div class="titulo-pagina">
+      <div>
+        <h1>Reportes</h1>
+        <p class="subtitulo" id="descripcion"></p>
+      </div>
+      <button type="button" class="btn principal" id="btnGenerar" disabled>Generar reporte</button>
+    </div>
+
+    <div class="pestanas" id="pestanas">
+      <button type="button" class="pestana activa" data-reporte="movimientos">Movimientos de préstamos</button>
+      <button type="button" class="pestana" data-reporte="prestamos">Préstamos por periodo</button>
+      <button type="button" class="pestana" data-reporte="libros">Libros más solicitados</button>
+      <button type="button" class="pestana" data-reporte="adeudos">Préstamos vencidos y multas</button>
+    </div>
+
+    <div class="resumen" id="resumen"></div>
+
+    <section class="tarjeta">
+      <!-- Filtros: según el reporte se muestran unos u otros -->
+      <div class="filtros">
+        <label data-filtro="desde">
+          Desde
+          <input type="date" id="fDesde">
+        </label>
+        <label data-filtro="hasta">
+          Hasta
+          <input type="date" id="fHasta">
+        </label>
+        <label data-filtro="tipo">
+          Tipo de movimiento
+          <select id="fTipo">
+            <option value="">Todos</option>
+            <option value="Prestamos">Préstamos</option>
+            <option value="Devoluciones">Devoluciones</option>
+            <option value="Incidencias">Con daños, extraviados o reportes</option>
+          </select>
+        </label>
+        <label data-filtro="estado">
+          Estado del préstamo
+          <select id="fEstado">
+            <option value="">Todos</option>
+            <option value="Pendientes">Pendientes (vigentes y vencidos)</option>
+            <option value="Vencido">Vencidos</option>
+            <option value="Devuelto">Devueltos en buen estado</option>
+            <option value="Incidencias">Con daños o extraviados</option>
+          </select>
+        </label>
+        <label data-filtro="texto">
+          Buscar
+          <input type="search" id="fTexto" placeholder="Lector, matrícula, libro o autor" autocomplete="off">
+        </label>
+        <label data-filtro="limite">
+          Mostrar los primeros
+          <select id="fLimite">
+            <option value="5">5 libros</option>
+            <option value="10" selected>10 libros</option>
+            <option value="20">20 libros</option>
+            <option value="50">50 libros</option>
+          </select>
+        </label>
+        <label data-filtro="multa">
+          Multa por día de retraso ($)
+          <input type="number" id="fMulta" min="0" step="0.5" value="5">
+        </label>
+        <button type="button" class="btn principal" id="btnConsultar">Consultar</button>
+      </div>
+
+      <div class="tabla-envoltorio">
+        <table>
+          <thead id="theadTabla"></thead>
+          <tbody id="cuerpo"></tbody>
+        </table>
+      </div>
+      <p class="vacio" id="vacio" hidden>No hay resultados para esta consulta.</p>
+      <p class="nota" id="nota" hidden></p>
+    </section>
+  </main>
+
+  <div id="toasts" class="toasts"></div>
+  <script src="/js/comun.js"></script>
+  <script src="/js/reportes.js"></script>
+</body>
+</html>

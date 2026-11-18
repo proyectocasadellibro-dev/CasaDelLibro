@@ -12,11 +12,13 @@ const usuariosController = require('./Controllers/usuariosController');
 const rolesController    = require('./Controllers/rolesController');
 const prestamosController  = require('./Controllers/prestamosController');
 const incidenciasController = require('./Controllers/incidenciasController');
+const reportesController   = require('./Controllers/reportesController');
 
 // Autorización por rol
 const { requiereRol, requiereSesion } = require('./Middleware/autorizacion');
 const soloAdmin   = requiereRol('Administrador');
 const puedeOperar = requiereRol('Administrador', 'Empleado');   // el Gerente solo consulta
+const soloReportes = requiereRol('Administrador', 'Gerente');  // reportes: Administrador y Gerente
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -63,6 +65,16 @@ app.patch('/api/prestamos/:id/devolucion', puedeOperar,    prestamosController.d
 // ---------- Libros dañados o extraviados ----------
 app.get('/api/incidencias',                requiereSesion, incidenciasController.listar);
 app.post('/api/incidencias',               puedeOperar,    incidenciasController.registrar);
+
+// ---------- Reportes (Administrador y Gerente) ----------
+app.get('/api/reportes/movimientos',           soloReportes, reportesController.movimientos);
+app.get('/api/reportes/prestamos',             soloReportes, reportesController.prestamos);
+app.get('/api/reportes/libros-mas-solicitados', soloReportes, reportesController.librosMasSolicitados);
+app.get('/api/reportes/adeudos',               soloReportes, reportesController.adeudos);
+
+// ---------- Estadísticas del Inicio (cualquier usuario con sesión) ----------
+// Reusa la consulta de "libros más solicitados" para la gráfica del Inicio.
+app.get('/api/estadisticas/libros-mas-solicitados', requiereSesion, reportesController.librosMasSolicitados);
 
 // ---------- Usuarios y roles (SOLO Administrador: responde 401 sin sesión y 403 sin permiso) ----------
 app.get('/api/usuarios',              soloAdmin, usuariosController.listar);
