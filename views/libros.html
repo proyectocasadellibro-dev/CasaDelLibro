@@ -80,6 +80,39 @@
           <input type="number" id="total" min="1" step="1" value="1" required>
         </label>
         <div id="notaEjemplares" class="alerta info" hidden></div>
+
+        <!-- Solo al editar: libros dañados o extraviados -->
+        <div class="completo seccion-reporte" id="seccionReporte" hidden>
+          <p class="seccion-titulo">Registrar libros dañados o extraviados</p>
+
+          <div class="reporte-fila">
+            <label>
+              Estado del libro
+              <select id="estadoReporte">
+                <option value="">Sin cambios</option>
+                <option value="Dañado">Dañado</option>
+                <option value="Extraviado">Extraviado</option>
+              </select>
+            </label>
+
+            <div class="campo">
+              <span class="etiqueta" id="etiquetaCantidad">Cantidad</span>
+              <div class="contador" role="group" aria-labelledby="etiquetaCantidad">
+                <button type="button" id="menosCantidad" aria-label="Restar uno">−</button>
+                <input type="number" id="cantidadReporte" min="1" step="1" value="1" aria-label="Cantidad de ejemplares">
+                <button type="button" id="masCantidad" aria-label="Sumar uno">+</button>
+              </div>
+            </div>
+          </div>
+
+          <label>
+            Observaciones <small>(opcional)</small>
+            <textarea id="observacionesReporte" maxlength="300"
+                      placeholder="Ej. Hojas arrancadas, portada mojada, no aparece en el estante…"></textarea>
+          </label>
+
+          <div id="resumenReporte" class="alerta info" hidden></div>
+        </div>
       </div>
       <div class="dlg-pie">
         <button type="button" class="btn claro" data-cerrar>Cancelar</button>
