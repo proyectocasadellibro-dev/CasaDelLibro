@@ -13,6 +13,7 @@ const rolesController    = require('./Controllers/rolesController');
 const prestamosController  = require('./Controllers/prestamosController');
 const incidenciasController = require('./Controllers/incidenciasController');
 const reportesController   = require('./Controllers/reportesController');
+const estadisticasController = require('./Controllers/estadisticasController');
 
 // Autorización por rol
 const { requiereRol, requiereSesion } = require('./Middleware/autorizacion');
@@ -74,6 +75,7 @@ app.get('/api/reportes/adeudos',               soloReportes, reportesController.
 
 // ---------- Estadísticas del Inicio (cualquier usuario con sesión) ----------
 // Reusa la consulta de "libros más solicitados" para la gráfica del Inicio.
+app.get('/api/estadisticas/resumen', requiereSesion, estadisticasController.resumen);
 app.get('/api/estadisticas/libros-mas-solicitados', requiereSesion, reportesController.librosMasSolicitados);
 
 // ---------- Usuarios y roles (SOLO Administrador: responde 401 sin sesión y 403 sin permiso) ----------

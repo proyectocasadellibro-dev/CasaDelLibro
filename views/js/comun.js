@@ -94,11 +94,39 @@ function pintarEncabezado(usuario, paginaActiva) {
   $('#encabezado').innerHTML = `
     <span class="marca">📚 La Casa Del Libro</span>
     <nav class="menu">${enlaces}</nav>
-    <div class="usuario">
-      <span>${esc(usuario.nombre)}</span>
-      <span class="rol">${esc(usuario.rol)}</span>
-      <button type="button" id="btnSalir">Cerrar sesión</button>
+    <div class="usuario-menu">
+      <button type="button" class="usuario-boton" id="btnUsuario" aria-haspopup="true" aria-expanded="false">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>${esc(usuario.nombre)}</span>
+        <svg class="ico chico" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="usuario-panel" id="panelUsuario" hidden>
+        <div class="usuario-datos">
+          <strong>${esc(usuario.nombre)}</strong>
+          <span class="rol">${esc(usuario.rol)}</span>
+        </div>
+        <button type="button" class="btn claro" id="btnSalir">Cerrar sesión</button>
+      </div>
     </div>`;
+
+  const boton = $('#btnUsuario');
+  const panel = $('#panelUsuario');
+  const cerrarPanel = () => {
+    panel.hidden = true;
+    boton.setAttribute('aria-expanded', 'false');
+  };
+
+  boton.addEventListener('click', (evento) => {
+    evento.stopPropagation();
+    panel.hidden = !panel.hidden;
+    boton.setAttribute('aria-expanded', String(!panel.hidden));
+  });
+  document.addEventListener('click', (evento) => {
+    if (!panel.hidden && !panel.contains(evento.target)) cerrarPanel();
+  });
+  document.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Escape') cerrarPanel();
+  });
 
   $('#btnSalir').addEventListener('click', async () => {
     await api('/api/logout', { method: 'POST' });
